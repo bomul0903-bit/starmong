@@ -7,6 +7,7 @@ import {
   handleMistake,
   isTierUnlocked,
   groupStagesByTier,
+  calculateUndo,
 } from '../gameLogic.js';
 
 describe('isValidConnection', () => {
@@ -169,5 +170,51 @@ describe('groupStagesByTier', () => {
     const emptyTiers = [{ key: 'x', label: 'X', color: 'red', difficulty: '없음' }];
     const result = groupStagesByTier(stages, emptyTiers);
     expect(result[0].stages).toHaveLength(0);
+  });
+});
+
+describe('calculateUndo', () => {
+  it('선이 없으면 null 반환', () => {
+    expect(calculateUndo([], [1], 300)).toBeNull();
+  });
+
+  it('마지막 선 제거 + activeStarId 업데이트', () => {
+    const result = calculateUndo([[1, 2], [2, 3]], [1, 2, 3], 300);
+    expect(result.newLines).toEqual([[1, 2]]);
+    expect(result.newActiveStarId).toBe(2);
+  });
+
+  it('연결 없는 별 selectedStars에서 제거', () => {
+    // 선 [1,2] 제거 → 별 2는 다른 선에 없음 → 제거
+    const result = calculateUndo([[1, 2]], [1, 2], 300);
+    expect(result.newSelectedStars).toEqual([1]);
+  });
+
+  it('다른 선에 여전히 연결된 별은 유지', () => {
+    // 선 [2,3] 제거 → 별 3은 [3,4]에 여전히 연결 → 유지
+    const result = calculateUndo([[1, 2], [3, 4], [2, 3]], [1, 2, 3, 4], 600);
+    expect(result.newSelectedStars).toEqual([1, 2, 3, 4]);
+  });
+
+  it('150점 차감', () => {
+    const result = calculateUndo([[1, 2]], [1, 2], 500);
+    expect(result.newScore).toBe(350);
+  });
+
+  it('점수 0 미만 방지', () => {
+    const result = calculateUndo([[1, 2]], [1, 2], 100);
+    expect(result.newScore).toBe(0);
+  });
+
+  it('연속 undo 동작 확인', () => {
+    // 첫 undo
+    const r1 = calculateUndo([[1, 2], [2, 3]], [1, 2, 3], 450);
+    expect(r1.newLines).toEqual([[1, 2]]);
+    expect(r1.newActiveStarId).toBe(2);
+    // 두 번째 undo
+    const r2 = calculateUndo(r1.newLines, r1.newSelectedStars, r1.newScore);
+    expect(r2.newLines).toEqual([]);
+    expect(r2.newActiveStarId).toBe(1);
+    expect(r2.newSelectedStars).toEqual([1]);
   });
 });

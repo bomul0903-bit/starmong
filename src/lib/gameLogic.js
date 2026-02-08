@@ -82,3 +82,26 @@ export function groupStagesByTier(stages, tiers) {
       .sort((a, b) => a.stars.length - b.stars.length),
   }));
 }
+
+/**
+ * 마지막 선을 취소(undo)할 때의 새 상태를 계산
+ * @param {Array<[number, number]>} lines - 현재 그려진 선 리스트
+ * @param {number[]} selectedStars - 현재 선택된 별 ID 리스트
+ * @param {number} score - 현재 점수
+ * @returns {{ newLines, newSelectedStars, newActiveStarId, newScore } | null}
+ */
+export function calculateUndo(lines, selectedStars, score) {
+  if (lines.length === 0) return null;
+  const removedLine = lines[lines.length - 1];
+  const newLines = lines.slice(0, -1);
+  const removedStarId = removedLine[1];
+  const stillConnected = newLines.some(
+    (l) => l[0] === removedStarId || l[1] === removedStarId
+  );
+  const newSelectedStars = stillConnected
+    ? selectedStars
+    : selectedStars.filter((id) => id !== removedStarId);
+  const newActiveStarId = removedLine[0];
+  const newScore = Math.max(0, score - 150);
+  return { newLines, newSelectedStars, newActiveStarId, newScore };
+}
