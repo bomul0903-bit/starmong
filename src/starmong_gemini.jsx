@@ -73,7 +73,8 @@ const STAGES = constellationData.map((c, index) => ({
 }));
 
 const TIERS = [
-  { key: 'easy', label: '쉬움', color: 'emerald', difficulty: '쉬움' },
+  { key: 'beginner', label: '입문', color: 'emerald', difficulty: '입문' },
+  { key: 'easy', label: '쉬움', color: 'sky', difficulty: '쉬움' },
   { key: 'medium', label: '보통', color: 'blue', difficulty: '보통' },
   { key: 'hard', label: '어려움', color: 'orange', difficulty: '어려움' },
   { key: 'extreme', label: '극한', color: 'rose', difficulty: '극한' },
@@ -290,6 +291,7 @@ const App = () => {
                 const unlocked = isTierUnlocked(tierIdx, tierIdx > 0 ? TIER_GROUPS[tierIdx - 1].stages : [], completed);
                 const tierColors = {
                   emerald: { bg: 'bg-emerald-500/10', border: 'border-emerald-500/30', text: 'text-emerald-400' },
+                  sky:     { bg: 'bg-sky-500/10',     border: 'border-sky-500/30',     text: 'text-sky-400' },
                   blue:    { bg: 'bg-blue-500/10',    border: 'border-blue-500/30',    text: 'text-blue-400' },
                   orange:  { bg: 'bg-orange-500/10',  border: 'border-orange-500/30',  text: 'text-orange-400' },
                   rose:    { bg: 'bg-rose-500/10',    border: 'border-rose-500/30',    text: 'text-rose-400' },

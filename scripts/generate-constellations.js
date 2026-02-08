@@ -232,19 +232,91 @@ async function main() {
     constellations.splice(serIndices[1], 1);
   }
 
+  // Merge close stars — collapse stars within `threshold` distance into a representative star
+  function mergeCloseStars(stars, path, threshold = 5) {
+    let currentStars = stars.map(s => ({ ...s }));
+    let currentPath = path.map(e => [...e]);
+
+    let merged = true;
+    while (merged) {
+      merged = false;
+      for (let i = 0; i < currentStars.length && !merged; i++) {
+        for (let j = i + 1; j < currentStars.length && !merged; j++) {
+          const a = currentStars[i];
+          const b = currentStars[j];
+          const dx = a.x - b.x;
+          const dy = a.y - b.y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist >= threshold) continue;
+
+          // Pick representative: prefer named star, then larger radius
+          let keep, remove;
+          if (a.name && !b.name) { keep = a; remove = b; }
+          else if (!a.name && b.name) { keep = b; remove = a; }
+          else if (a.r >= b.r) { keep = a; remove = b; }
+          else { keep = b; remove = a; }
+
+          // Transfer edges from removed star to kept star
+          currentPath = currentPath.map(([s, e]) => [
+            s === remove.id ? keep.id : s,
+            e === remove.id ? keep.id : e,
+          ]);
+          // Remove self-loops
+          currentPath = currentPath.filter(([s, e]) => s !== e);
+          // Remove duplicate edges
+          const edgeSet = new Set();
+          currentPath = currentPath.filter(([s, e]) => {
+            const key = Math.min(s, e) + '-' + Math.max(s, e);
+            if (edgeSet.has(key)) return false;
+            edgeSet.add(key);
+            return true;
+          });
+          // Remove the star
+          currentStars = currentStars.filter(s => s.id !== remove.id);
+          merged = true;
+        }
+      }
+    }
+
+    // Re-assign sequential IDs
+    const oldToNew = new Map();
+    currentStars.forEach((s, i) => oldToNew.set(s.id, i + 1));
+    return {
+      stars: currentStars.map((s, i) => ({ ...s, id: i + 1 })),
+      path: currentPath.map(([a, b]) => [oldToNew.get(a), oldToNew.get(b)]),
+    };
+  }
+
   // Simplify all constellations
   let removedTotal = 0;
+  let mergedTotal = 0;
   for (const c of constellations) {
     const before = c.stars.length;
     const result = simplify(c.stars, c.path);
     c.stars = result.stars;
     c.path = result.path;
     removedTotal += before - c.stars.length;
-    // Assign difficulty by final star count
-    const n = c.stars.length;
-    c.difficulty = n <= 3 ? '쉬움' : n <= 6 ? '보통' : n <= 11 ? '어려움' : '극한';
+
+    // Merge close stars
+    const beforeMerge = c.stars.length;
+    const merged = mergeCloseStars(c.stars, c.path);
+    c.stars = merged.stars;
+    c.path = merged.path;
+    mergedTotal += beforeMerge - c.stars.length;
   }
   console.log(`  Simplified: removed ${removedTotal} pass-through stars`);
+  console.log(`  Merged: removed ${mergedTotal} close stars (threshold < 5)`);
+
+  // Assign difficulty by constellation count (5-tier system)
+  constellations.sort((a, b) => a.stars.length - b.stars.length);
+  constellations.forEach((c, i) => {
+    if (i < 5)       c.difficulty = '입문';     // 1단계: 5개
+    else if (i < 15) c.difficulty = '쉬움';     // 2단계: 10개
+    else if (i < 39) c.difficulty = '보통';     // 3단계: 24개
+    else if (i < 63) c.difficulty = '어려움';   // 4단계: 24개
+    else             c.difficulty = '극한';     // 5단계: 나머지
+  });
+  console.log(`  Difficulty distribution: 입문=${constellations.filter(c=>c.difficulty==='입문').length}, 쉬움=${constellations.filter(c=>c.difficulty==='쉬움').length}, 보통=${constellations.filter(c=>c.difficulty==='보통').length}, 어려움=${constellations.filter(c=>c.difficulty==='어려움').length}, 극한=${constellations.filter(c=>c.difficulty==='극한').length}`);
 
   // Write output
   const outputDir = join(__dirname, '..', 'src', 'data');
