@@ -1,37 +1,168 @@
-
-▗ ▗   ▖ ▖  Claude Code v2.1.34
-           Opus 4.6 · Claude Pro
-  ▘▘ ▝▝    ~/work/bomul/starmong
-
-✻ Conversation compacted (ctrl+o for history)
-
-
-❯ /compact 
-  ⎿  Compacted (ctrl+o to see full summary)
-  ⎿  Referenced file src/starmong_gemini.jsx
-  ⎿  Read tailwind.config.js (13 lines)
-  ⎿  Read src/index.css (9 lines)
-  ⎿  Plan file referenced (~/.claude/plans/swirling-waddling-twilight.md)
-
-❯ /context 
-  ⎿  Context Usage
-     ⛁ ⛀ ⛁ ⛁ ⛁ ⛁ ⛁ ⛁ ⛁ ⛁   claude-opus-4-6 · 26k/200k tokens (13%)
-     ⛀ ⛀ ⛀ ⛁ ⛁ ⛶ ⛶ ⛶ ⛶ ⛶ 
-     ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶   Estimated usage by category
-     ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶   ⛁ System prompt: 3.1k tokens (1.5%)
-     ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶   ⛁ System tools: 16.7k tokens (8.3%)
-     ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶   ⛁ MCP tools: 909 tokens (0.5%)
-     ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶   ⛁ Memory files: 332 tokens (0.2%)
-     ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶   ⛁ Skills: 61 tokens (0.0%)
-     ⛶ ⛶ ⛶ ⛝ ⛝ ⛝ ⛝ ⛝ ⛝ ⛝   ⛁ Messages: 4.7k tokens (2.4%)
-     ⛝ ⛝ ⛝ ⛝ ⛝ ⛝ ⛝ ⛝ ⛝ ⛝   ⛶ Free space: 141k (70.6%)
-                           ⛝ Autocompact buffer: 33k tokens (16.5%)
-
-     MCP tools · /mcp
-     └ mcp__context7__resolve-library-id: 500 tokens
-     └ mcp__context7__query-docs: 409 tokens
-
-     Memory files · /memory
-     └ CLAUDE.md: 332 tokens
-
-     Skills · /skills
+Plan to implement                                                                                                              │
+│                                                                                                                                │
+│ 컴포넌트 분리 + 선 취소(Undo) 기능                                                                                             │
+│                                                                                                                                │
+│ Context                                                                                                                        │
+│                                                                                                                                │
+│ starmong_gemini.jsx가 ~520줄 단일 파일로 Menu/Map/Game 뷰, 모달 2개, SoundEngine, 상수가 모두 한 곳에 있음. 유지보수와 확장이  │
+│ 어려운 상태. 또한 게임 중 잘못 연결한 선을 취소할 방법이 없어 UX가 불편함. 단점 분석 우선순위 1~2번을 구현.                    │
+│                                                                                                                                │
+│ 변경 파일 요약                                                                                                                 │
+│ ┌─────────────────────────────────────┬──────┬────────────────────────────────────────────┐                                    │
+│ │                파일                 │ 작업 │                    설명                    │                                    │
+│ ├─────────────────────────────────────┼──────┼────────────────────────────────────────────┤                                    │
+│ │ src/lib/constants.js                │ 생성 │ STAGES, TIERS, TIER_GROUPS, MAX_MISTAKES   │                                    │
+│ ├─────────────────────────────────────┼──────┼────────────────────────────────────────────┤                                    │
+│ │ src/lib/soundEngine.js              │ 생성 │ SoundEngine IIFE 추출                      │                                    │
+│ ├─────────────────────────────────────┼──────┼────────────────────────────────────────────┤                                    │
+│ │ src/components/BackgroundStars.jsx  │ 생성 │ 배경 별 애니메이션                         │                                    │
+│ ├─────────────────────────────────────┼──────┼────────────────────────────────────────────┤                                    │
+│ │ src/components/Miniature.jsx        │ 생성 │ 별자리 미니 SVG                            │                                    │
+│ ├─────────────────────────────────────┼──────┼────────────────────────────────────────────┤                                    │
+│ │ src/components/TopBar.jsx           │ 생성 │ 점수/진행도/홈 버튼                        │                                    │
+│ ├─────────────────────────────────────┼──────┼────────────────────────────────────────────┤                                    │
+│ │ src/components/MenuView.jsx         │ 생성 │ 타이틀 화면                                │                                    │
+│ ├─────────────────────────────────────┼──────┼────────────────────────────────────────────┤                                    │
+│ │ src/components/MapView.jsx          │ 생성 │ 도감 화면 (tierColors 포함)                │                                    │
+│ ├─────────────────────────────────────┼──────┼────────────────────────────────────────────┤                                    │
+│ │ src/components/GameView.jsx         │ 생성 │ 게임 화면 (취소 버튼 포함)                 │                                    │
+│ ├─────────────────────────────────────┼──────┼────────────────────────────────────────────┤                                    │
+│ │ src/components/EduCardModal.jsx     │ 생성 │ 수집 완료 카드 모달                        │                                    │
+│ ├─────────────────────────────────────┼──────┼────────────────────────────────────────────┤                                    │
+│ │ src/components/FailCardModal.jsx    │ 생성 │ 실패 모달                                  │                                    │
+│ ├─────────────────────────────────────┼──────┼────────────────────────────────────────────┤                                    │
+│ │ src/lib/gameLogic.js                │ 수정 │ calculateUndo 함수 추가                    │                                    │
+│ ├─────────────────────────────────────┼──────┼────────────────────────────────────────────┤                                    │
+│ │ src/lib/__tests__/gameLogic.test.js │ 수정 │ undo 테스트 7개 추가                       │                                    │
+│ ├─────────────────────────────────────┼──────┼────────────────────────────────────────────┤                                    │
+│ │ src/starmong_gemini.jsx             │ 수정 │ ~520줄 → ~110줄 (상태 + 핸들러 + 라우팅만) │                                    │
+│ └─────────────────────────────────────┴──────┴────────────────────────────────────────────┘                                    │
+│ Part 1: 컴포넌트 분리 (bottom-up 순서)                                                                                         │
+│                                                                                                                                │
+│ Step 1: src/lib/constants.js 생성                                                                                              │
+│                                                                                                                                │
+│ - constellationData import + STAGES 배열 생성                                                                                  │
+│ - TIERS 9단계 배열                                                                                                             │
+│ - TIER_GROUPS = groupStagesByTier(STAGES, TIERS)                                                                               │
+│ - MAX_MISTAKES = 3                                                                                                             │
+│                                                                                                                                │
+│ Step 2: src/lib/soundEngine.js 생성                                                                                            │
+│                                                                                                                                │
+│ - SoundEngine IIFE를 그대로 옮기고 export default                                                                              │
+│ - React 의존성 없음, 각 컴포넌트에서 직접 import                                                                               │
+│                                                                                                                                │
+│ Step 3: src/components/BackgroundStars.jsx 생성                                                                                │
+│                                                                                                                                │
+│ - React.memo + useMemo 패턴 그대로                                                                                             │
+│ - Props 없음 (자체 완결)                                                                                                       │
+│                                                                                                                                │
+│ Step 4: src/components/Miniature.jsx 생성                                                                                      │
+│                                                                                                                                │
+│ - Props: { level } (stars, path 포함 객체)                                                                                     │
+│                                                                                                                                │
+│ Step 5: src/components/TopBar.jsx 생성                                                                                         │
+│                                                                                                                                │
+│ - Props: { score, completedCount, onHomeClick }                                                                                │
+│ - SoundEngine, STAGES를 직접 import                                                                                            │
+│                                                                                                                                │
+│ Step 6: src/components/EduCardModal.jsx 생성                                                                                   │
+│                                                                                                                                │
+│ - Props: { level, onClose }                                                                                                    │
+│ - SoundEngine 직접 import                                                                                                      │
+│                                                                                                                                │
+│ Step 7: src/components/FailCardModal.jsx 생성                                                                                  │
+│                                                                                                                                │
+│ - Props: { onRetry, onReview }                                                                                                 │
+│ - SoundEngine 직접 import                                                                                                      │
+│                                                                                                                                │
+│ Step 8: src/components/MenuView.jsx 생성                                                                                       │
+│                                                                                                                                │
+│ - Props: { onStart }                                                                                                           │
+│ - SoundEngine, STAGES 직접 import                                                                                              │
+│                                                                                                                                │
+│ Step 9: src/components/MapView.jsx 생성                                                                                        │
+│                                                                                                                                │
+│ - Props: { completed, onSelectLevel }                                                                                          │
+│ - TIER_GROUPS, isTierUnlocked, Miniature, SoundEngine 직접 import                                                              │
+│ - tierColors 맵은 이 컴포넌트 내부에 유지                                                                                      │
+│                                                                                                                                │
+│ Step 10: src/components/GameView.jsx 생성                                                                                      │
+│                                                                                                                                │
+│ - Props:                                                                                                                       │
+│ { currentLevel, activeStarId, selectedStars, lines, time,                                                                      │
+│   isGameActive, showHint, mistakes, maxMistakes, dogMsg,                                                                       │
+│   onStarClick, onHintClick, onUndoClick }                                                                                      │
+│ - 순수 렌더링 컴포넌트 (상태 변경은 App에서)                                                                                   │
+│                                                                                                                                │
+│ Step 11: src/starmong_gemini.jsx 축소                                                                                          │
+│                                                                                                                                │
+│ - 모든 state 선언 유지 (view, completed, score, 게임 상태들)                                                                   │
+│ - useEffect 3개 유지 (타이머, localStorage 2개)                                                                                │
+│ - 핸들러 유지 (startGame, handleStarClick, finishGame, triggerHint, handleUndo)                                                │
+│ - 렌더: BackgroundStars + TopBar + 뷰 스위치 + 모달 조건부 렌더링                                                              │
+│ - inline <style> 블록 유지                                                                                                     │
+│                                                                                                                                │
+│ Part 2: 선 취소(Undo) 기능                                                                                                     │
+│                                                                                                                                │
+│ Step 12: calculateUndo 순수 함수 추가 (gameLogic.js)                                                                           │
+│                                                                                                                                │
+│ export function calculateUndo(lines, selectedStars, score) {                                                                   │
+│   if (lines.length === 0) return null;                                                                                         │
+│   const removedLine = lines[lines.length - 1];                                                                                 │
+│   const newLines = lines.slice(0, -1);                                                                                         │
+│   const removedStarId = removedLine[1];                                                                                        │
+│   const stillConnected = newLines.some(                                                                                        │
+│     l => l[0] === removedStarId || l[1] === removedStarId                                                                      │
+│   );                                                                                                                           │
+│   const newSelectedStars = stillConnected                                                                                      │
+│     ? selectedStars                                                                                                            │
+│     : selectedStars.filter(id => id !== removedStarId);                                                                        │
+│   const newActiveStarId = removedLine[0];                                                                                      │
+│   const newScore = Math.max(0, score - 150);                                                                                   │
+│   return { newLines, newSelectedStars, newActiveStarId, newScore };                                                            │
+│ }                                                                                                                              │
+│                                                                                                                                │
+│ 동작: 마지막 선 제거 → activeStarId를 선의 출발점으로 복원 → 더 이상 연결 없는 별은 selectedStars에서 제거 → 150점 차감        │
+│                                                                                                                                │
+│ Step 13: calculateUndo 테스트 추가 (gameLogic.test.js)                                                                         │
+│                                                                                                                                │
+│ 7개 테스트:                                                                                                                    │
+│ 1. 선이 없으면 null 반환                                                                                                       │
+│ 2. 마지막 선 제거 + activeStarId 업데이트                                                                                      │
+│ 3. 연결 없는 별 selectedStars에서 제거                                                                                         │
+│ 4. 다른 선에 여전히 연결된 별은 유지                                                                                           │
+│ 5. 150점 차감                                                                                                                  │
+│ 6. 점수 0 미만 방지                                                                                                            │
+│ 7. 연속 undo 동작 확인                                                                                                         │
+│                                                                                                                                │
+│ Step 14: handleUndo 핸들러 추가 (App)                                                                                          │
+│                                                                                                                                │
+│ const handleUndo = () => {                                                                                                     │
+│   if (!isGameActive) return;                                                                                                   │
+│   const result = calculateUndo(lines, selectedStars, score);                                                                   │
+│   if (!result) return;                                                                                                         │
+│   SoundEngine.buttonClick();                                                                                                   │
+│   setLines(result.newLines);                                                                                                   │
+│   setSelectedStars(result.newSelectedStars);                                                                                   │
+│   setActiveStarId(result.newActiveStarId);                                                                                     │
+│   setScore(result.newScore);                                                                                                   │
+│   setDogMsg("마지막 연결을 취소했어!");                                                                                        │
+│ };                                                                                                                             │
+│                                                                                                                                │
+│ Step 15: Undo 버튼 UI (GameView.jsx)                                                                                           │
+│                                                                                                                                │
+│ 힌트 버튼 옆에 배치. RotateCcw 아이콘 사용 (이미 import됨). lines.length === 0 || !isGameActive일 때 disabled.                 │
+│                                                                                                                                │
+│ 검증                                                                                                                           │
+│                                                                                                                                │
+│ npx vitest run       # 기존 28개 + undo 7개 = 35개 테스트 통과                                                                 │
+│ npm run build        # 빌드 정상                                                                                               │
+│ npm run dev          # 수동 확인: 3개 뷰 전환, 게임 플레이, undo 동작                                                          │
+│                                                                                                                                │
+│ 확인 사항:                                                                                                                     │
+│ - 메뉴 → 도감 → 게임 뷰 전환 정상                                                                                              │
+│ - 9개 티어 색상 표시 정상                                                                                                      │
+│ - 별 연결 → undo → 재연결 정상                                                                                                 │
+│ - undo 시 점수 차감, 별 하이라이트 해제                                                                                        │
+│ - 게임 완료/실패 후 undo 버튼 비활성화                                                                                         │
+│ - 기존 게임 로직 영향 없음        
