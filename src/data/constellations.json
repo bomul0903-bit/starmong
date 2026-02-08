@@ -3,7 +3,7 @@
     "id": "CVn",
     "name": "사냥개자리",
     "nameEn": "Hunting Dogs",
-    "difficulty": "입문",
+    "difficulty": "2별",
     "stars": [
       {
         "id": 1,
@@ -31,7 +31,7 @@
     "id": "CMi",
     "name": "작은개자리",
     "nameEn": "Little Dog",
-    "difficulty": "입문",
+    "difficulty": "2별",
     "stars": [
       {
         "id": 1,
@@ -60,7 +60,7 @@
     "id": "Ant",
     "name": "공기펌프자리",
     "nameEn": "Air Pump",
-    "difficulty": "입문",
+    "difficulty": "3별",
     "stars": [
       {
         "id": 1,
@@ -97,7 +97,7 @@
     "id": "Cir",
     "name": "컴퍼스자리",
     "nameEn": "Compass",
-    "difficulty": "입문",
+    "difficulty": "3별",
     "stars": [
       {
         "id": 1,
@@ -134,7 +134,7 @@
     "id": "Com",
     "name": "머리털자리",
     "nameEn": "Berenice's Hair",
-    "difficulty": "입문",
+    "difficulty": "3별",
     "stars": [
       {
         "id": 1,
@@ -173,7 +173,7 @@
     "id": "Equ",
     "name": "조랑말자리",
     "nameEn": "Colt",
-    "difficulty": "쉬움",
+    "difficulty": "3별",
     "stars": [
       {
         "id": 1,
@@ -211,7 +211,7 @@
     "id": "For",
     "name": "화로자리",
     "nameEn": "Furnace",
-    "difficulty": "쉬움",
+    "difficulty": "3별",
     "stars": [
       {
         "id": 1,
@@ -249,7 +249,7 @@
     "id": "Oct",
     "name": "팔분의자리",
     "nameEn": "Octant",
-    "difficulty": "쉬움",
+    "difficulty": "3별",
     "stars": [
       {
         "id": 1,
@@ -290,7 +290,7 @@
     "id": "Pic",
     "name": "화가자리",
     "nameEn": "Painter",
-    "difficulty": "쉬움",
+    "difficulty": "3별",
     "stars": [
       {
         "id": 1,
@@ -327,7 +327,7 @@
     "id": "Tel",
     "name": "망원경자리",
     "nameEn": "Telescope",
-    "difficulty": "쉬움",
+    "difficulty": "3별",
     "stars": [
       {
         "id": 1,
@@ -364,7 +364,7 @@
     "id": "Tri",
     "name": "삼각형자리",
     "nameEn": "Triangle",
-    "difficulty": "쉬움",
+    "difficulty": "3별",
     "stars": [
       {
         "id": 1,
@@ -407,7 +407,7 @@
     "id": "TrA",
     "name": "남쪽삼각형자리",
     "nameEn": "Southern Triangle",
-    "difficulty": "쉬움",
+    "difficulty": "3별",
     "stars": [
       {
         "id": 1,
@@ -449,7 +449,7 @@
     "id": "Aps",
     "name": "극락조자리",
     "nameEn": "Bird of Paradise",
-    "difficulty": "쉬움",
+    "difficulty": "4별",
     "stars": [
       {
         "id": 1,
@@ -496,7 +496,7 @@
     "id": "Ari",
     "name": "양자리",
     "nameEn": "Ram",
-    "difficulty": "쉬움",
+    "difficulty": "4별",
     "stars": [
       {
         "id": 1,
@@ -547,7 +547,7 @@
     "id": "Cae",
     "name": "조각칼자리",
     "nameEn": "Graving tool",
-    "difficulty": "쉬움",
+    "difficulty": "4별",
     "stars": [
       {
         "id": 1,
@@ -594,7 +594,7 @@
     "id": "Cru",
     "name": "남십자자리",
     "nameEn": "Cross",
-    "difficulty": "보통",
+    "difficulty": "4별",
     "stars": [
       {
         "id": 1,
@@ -641,7 +641,7 @@
     "id": "Men",
     "name": "테이블산자리",
     "nameEn": "Mensa",
-    "difficulty": "보통",
+    "difficulty": "4별",
     "stars": [
       {
         "id": 1,
@@ -688,7 +688,7 @@
     "id": "Nor",
     "name": "직각자자리",
     "nameEn": "Level",
-    "difficulty": "보통",
+    "difficulty": "4별",
     "stars": [
       {
         "id": 1,
@@ -739,7 +739,7 @@
     "id": "Pyx",
     "name": "나침반자리",
     "nameEn": "Compass",
-    "difficulty": "보통",
+    "difficulty": "4별",
     "stars": [
       {
         "id": 1,
@@ -787,7 +787,7 @@
     "id": "Ret",
     "name": "그물자리",
     "nameEn": "Net",
-    "difficulty": "보통",
+    "difficulty": "4별",
     "stars": [
       {
         "id": 1,
@@ -838,7 +838,7 @@
     "id": "Sge",
     "name": "화살자리",
     "nameEn": "Arrow",
-    "difficulty": "보통",
+    "difficulty": "4별",
     "stars": [
       {
         "id": 1,
@@ -886,7 +886,7 @@
     "id": "Scl",
     "name": "조각가자리",
     "nameEn": "Sculptor",
-    "difficulty": "보통",
+    "difficulty": "4별",
     "stars": [
       {
         "id": 1,
@@ -933,7 +933,7 @@
     "id": "Sct",
     "name": "방패자리",
     "nameEn": "Shield",
-    "difficulty": "보통",
+    "difficulty": "4별",
     "stars": [
       {
         "id": 1,
@@ -984,7 +984,7 @@
     "id": "Sex",
     "name": "육분의자리",
     "nameEn": "Sextant",
-    "difficulty": "보통",
+    "difficulty": "4별",
     "stars": [
       {
         "id": 1,
@@ -1031,7 +1031,7 @@
     "id": "Cnc",
     "name": "게자리",
     "nameEn": "Crab",
-    "difficulty": "보통",
+    "difficulty": "5별",
     "stars": [
       {
         "id": 1,
@@ -1093,7 +1093,7 @@
     "id": "Cas",
     "name": "카시오페이아자리",
     "nameEn": "Cassiopeia",
-    "difficulty": "보통",
+    "difficulty": "5별",
     "stars": [
       {
         "id": 1,
@@ -1155,7 +1155,7 @@
     "id": "Cha",
     "name": "카멜레온자리",
     "nameEn": "Chamaeleon",
-    "difficulty": "보통",
+    "difficulty": "5별",
     "stars": [
       {
         "id": 1,
@@ -1216,7 +1216,7 @@
     "id": "Col",
     "name": "비둘기자리",
     "nameEn": "Dove",
-    "difficulty": "보통",
+    "difficulty": "5별",
     "stars": [
       {
         "id": 1,
@@ -1275,7 +1275,7 @@
     "id": "Crv",
     "name": "까마귀자리",
     "nameEn": "Crow",
-    "difficulty": "보통",
+    "difficulty": "5별",
     "stars": [
       {
         "id": 1,
@@ -1341,7 +1341,7 @@
     "id": "Del",
     "name": "돌고래자리",
     "nameEn": "Dolphin",
-    "difficulty": "보통",
+    "difficulty": "5별",
     "stars": [
       {
         "id": 1,
@@ -1406,7 +1406,7 @@
     "id": "Ind",
     "name": "인디언자리",
     "nameEn": "Indian",
-    "difficulty": "보통",
+    "difficulty": "5별",
     "stars": [
       {
         "id": 1,
@@ -1468,7 +1468,7 @@
     "id": "LMi",
     "name": "작은사자자리",
     "nameEn": "Little Lion",
-    "difficulty": "보통",
+    "difficulty": "5별",
     "stars": [
       {
         "id": 1,
@@ -1530,7 +1530,7 @@
     "id": "Mic",
     "name": "현미경자리",
     "nameEn": "Microscope",
-    "difficulty": "보통",
+    "difficulty": "5별",
     "stars": [
       {
         "id": 1,
@@ -1591,7 +1591,7 @@
     "id": "Vol",
     "name": "날치자리",
     "nameEn": "Flying Fish",
-    "difficulty": "보통",
+    "difficulty": "5별",
     "stars": [
       {
         "id": 1,
@@ -1656,7 +1656,7 @@
     "id": "Vul",
     "name": "작은여우자리",
     "nameEn": "Little Fox",
-    "difficulty": "보통",
+    "difficulty": "5별",
     "stars": [
       {
         "id": 1,
@@ -1714,7 +1714,7 @@
     "id": "Dor",
     "name": "황새치자리",
     "nameEn": "Goldfish",
-    "difficulty": "보통",
+    "difficulty": "6별",
     "stars": [
       {
         "id": 1,
@@ -1789,7 +1789,7 @@
     "id": "Hor",
     "name": "시계자리",
     "nameEn": "Clock",
-    "difficulty": "보통",
+    "difficulty": "6별",
     "stars": [
       {
         "id": 1,
@@ -1856,7 +1856,7 @@
     "id": "Hyi",
     "name": "물뱀자리",
     "nameEn": "Hydrus",
-    "difficulty": "보통",
+    "difficulty": "6별",
     "stars": [
       {
         "id": 1,
@@ -1923,7 +1923,7 @@
     "id": "Lib",
     "name": "천칭자리",
     "nameEn": "Balance",
-    "difficulty": "보통",
+    "difficulty": "6별",
     "stars": [
       {
         "id": 1,
@@ -1998,7 +1998,7 @@
     "id": "Lyr",
     "name": "거문고자리",
     "nameEn": "Lyre",
-    "difficulty": "어려움",
+    "difficulty": "6별",
     "stars": [
       {
         "id": 1,
@@ -2077,7 +2077,7 @@
     "id": "Mus",
     "name": "파리자리",
     "nameEn": "Fly",
-    "difficulty": "어려움",
+    "difficulty": "6별",
     "stars": [
       {
         "id": 1,
@@ -2148,7 +2148,7 @@
     "id": "Phe",
     "name": "봉황자리",
     "nameEn": "Phoenix",
-    "difficulty": "어려움",
+    "difficulty": "6별",
     "stars": [
       {
         "id": 1,
@@ -2225,7 +2225,7 @@
     "id": "Tuc",
     "name": "큰부리새자리",
     "nameEn": "Toucan",
-    "difficulty": "어려움",
+    "difficulty": "6별",
     "stars": [
       {
         "id": 1,
@@ -2296,7 +2296,7 @@
     "id": "Ara",
     "name": "제단자리",
     "nameEn": "Altar",
-    "difficulty": "어려움",
+    "difficulty": "7~8별",
     "stars": [
       {
         "id": 1,
@@ -2374,7 +2374,7 @@
     "id": "CrB",
     "name": "북쪽왕관자리",
     "nameEn": "Northern Crown",
-    "difficulty": "어려움",
+    "difficulty": "7~8별",
     "stars": [
       {
         "id": 1,
@@ -2453,7 +2453,7 @@
     "id": "Lyn",
     "name": "살쾡이자리",
     "nameEn": "Lynx",
-    "difficulty": "어려움",
+    "difficulty": "7~8별",
     "stars": [
       {
         "id": 1,
@@ -2531,7 +2531,7 @@
     "id": "UMi",
     "name": "작은곰자리",
     "nameEn": "Little Dipper",
-    "difficulty": "어려움",
+    "difficulty": "7~8별",
     "stars": [
       {
         "id": 1,
@@ -2619,7 +2619,7 @@
     "id": "Aql",
     "name": "독수리자리",
     "nameEn": "Eagle",
-    "difficulty": "어려움",
+    "difficulty": "7~8별",
     "stars": [
       {
         "id": 1,
@@ -2721,7 +2721,7 @@
     "id": "Cam",
     "name": "기린자리",
     "nameEn": "Giraffe",
-    "difficulty": "어려움",
+    "difficulty": "7~8별",
     "stars": [
       {
         "id": 1,
@@ -2808,7 +2808,7 @@
     "id": "CrA",
     "name": "남쪽왕관자리",
     "nameEn": "Southern Crown",
-    "difficulty": "어려움",
+    "difficulty": "7~8별",
     "stars": [
       {
         "id": 1,
@@ -2896,7 +2896,7 @@
     "id": "Gru",
     "name": "두루미자리",
     "nameEn": "Crane",
-    "difficulty": "어려움",
+    "difficulty": "7~8별",
     "stars": [
       {
         "id": 1,
@@ -2990,7 +2990,7 @@
     "id": "PsA",
     "name": "남쪽물고기자리",
     "nameEn": "Southern Fish",
-    "difficulty": "어려움",
+    "difficulty": "7~8별",
     "stars": [
       {
         "id": 1,
@@ -3087,7 +3087,7 @@
     "id": "Vel",
     "name": "돛자리",
     "nameEn": "Sails",
-    "difficulty": "어려움",
+    "difficulty": "7~8별",
     "stars": [
       {
         "id": 1,
@@ -3178,7 +3178,7 @@
     "id": "Aur",
     "name": "마차부자리",
     "nameEn": "Charioteer",
-    "difficulty": "어려움",
+    "difficulty": "9~11별",
     "stars": [
       {
         "id": 1,
@@ -3291,7 +3291,7 @@
     "id": "Cep",
     "name": "세페우스자리",
     "nameEn": "Cepheus",
-    "difficulty": "어려움",
+    "difficulty": "9~11별",
     "stars": [
       {
         "id": 1,
@@ -3402,7 +3402,7 @@
     "id": "Crt",
     "name": "컵자리",
     "nameEn": "Cup",
-    "difficulty": "어려움",
+    "difficulty": "9~11별",
     "stars": [
       {
         "id": 1,
@@ -3506,7 +3506,7 @@
     "id": "Cyg",
     "name": "고니자리",
     "nameEn": "Swan",
-    "difficulty": "어려움",
+    "difficulty": "9~11별",
     "stars": [
       {
         "id": 1,
@@ -3609,7 +3609,7 @@
     "id": "Lac",
     "name": "도마뱀자리",
     "nameEn": "Lizard",
-    "difficulty": "어려움",
+    "difficulty": "9~11별",
     "stars": [
       {
         "id": 1,
@@ -3714,7 +3714,7 @@
     "id": "Leo",
     "name": "사자자리",
     "nameEn": "Lion",
-    "difficulty": "어려움",
+    "difficulty": "9~11별",
     "stars": [
       {
         "id": 1,
@@ -3824,7 +3824,7 @@
     "id": "Mon",
     "name": "외뿔소자리",
     "nameEn": "Unicorn",
-    "difficulty": "어려움",
+    "difficulty": "9~11별",
     "stars": [
       {
         "id": 1,
@@ -3921,7 +3921,7 @@
     "id": "Cap",
     "name": "염소자리",
     "nameEn": "Capricorn",
-    "difficulty": "어려움",
+    "difficulty": "9~11별",
     "stars": [
       {
         "id": 1,
@@ -4038,7 +4038,7 @@
     "id": "Pav",
     "name": "공작자리",
     "nameEn": "Peacock",
-    "difficulty": "어려움",
+    "difficulty": "9~11별",
     "stars": [
       {
         "id": 1,
@@ -4150,7 +4150,7 @@
     "id": "Pup",
     "name": "고물자리",
     "nameEn": "Poop Deck",
-    "difficulty": "어려움",
+    "difficulty": "9~11별",
     "stars": [
       {
         "id": 1,
@@ -4266,7 +4266,7 @@
     "id": "CMa",
     "name": "큰개자리",
     "nameEn": "Great Dog",
-    "difficulty": "극한",
+    "difficulty": "9~11별",
     "stars": [
       {
         "id": 1,
@@ -4396,7 +4396,7 @@
     "id": "Lep",
     "name": "토끼자리",
     "nameEn": "Hare",
-    "difficulty": "극한",
+    "difficulty": "9~11별",
     "stars": [
       {
         "id": 1,
@@ -4517,7 +4517,7 @@
     "id": "Tau",
     "name": "황소자리",
     "nameEn": "Bull",
-    "difficulty": "극한",
+    "difficulty": "9~11별",
     "stars": [
       {
         "id": 1,
@@ -4641,7 +4641,7 @@
     "id": "Boo",
     "name": "목동자리",
     "nameEn": "Herdsman",
-    "difficulty": "극한",
+    "difficulty": "12~14별",
     "stars": [
       {
         "id": 1,
@@ -4785,7 +4785,7 @@
     "id": "Gem",
     "name": "쌍둥이자리",
     "nameEn": "Twins",
-    "difficulty": "극한",
+    "difficulty": "12~14별",
     "stars": [
       {
         "id": 1,
@@ -4921,7 +4921,7 @@
     "id": "Lup",
     "name": "이리자리",
     "nameEn": "Wolf",
-    "difficulty": "극한",
+    "difficulty": "12~14별",
     "stars": [
       {
         "id": 1,
@@ -5054,7 +5054,7 @@
     "id": "Aqr",
     "name": "물병자리",
     "nameEn": "Aquarius",
-    "difficulty": "극한",
+    "difficulty": "12~14별",
     "stars": [
       {
         "id": 1,
@@ -5199,7 +5199,7 @@
     "id": "Car",
     "name": "용골자리",
     "nameEn": "Keel",
-    "difficulty": "극한",
+    "difficulty": "12~14별",
     "stars": [
       {
         "id": 1,
@@ -5350,7 +5350,7 @@
     "id": "Peg",
     "name": "페가수스자리",
     "nameEn": "Pegasus",
-    "difficulty": "극한",
+    "difficulty": "12~14별",
     "stars": [
       {
         "id": 1,
@@ -5501,7 +5501,7 @@
     "id": "Vir",
     "name": "처녀자리",
     "nameEn": "Virgin",
-    "difficulty": "극한",
+    "difficulty": "12~14별",
     "stars": [
       {
         "id": 1,
@@ -5648,7 +5648,7 @@
     "id": "Cet",
     "name": "고래자리",
     "nameEn": "Whale",
-    "difficulty": "극한",
+    "difficulty": "12~14별",
     "stars": [
       {
         "id": 1,
@@ -5811,7 +5811,7 @@
     "id": "Hya",
     "name": "바다뱀자리",
     "nameEn": "Sea Serpent",
-    "difficulty": "극한",
+    "difficulty": "12~14별",
     "stars": [
       {
         "id": 1,
@@ -5963,7 +5963,7 @@
     "id": "Oph",
     "name": "뱀주인자리",
     "nameEn": "Ophiuchus",
-    "difficulty": "극한",
+    "difficulty": "12~14별",
     "stars": [
       {
         "id": 1,
@@ -6127,7 +6127,7 @@
     "id": "Sco",
     "name": "전갈자리",
     "nameEn": "Scorpion",
-    "difficulty": "극한",
+    "difficulty": "12~14별",
     "stars": [
       {
         "id": 1,
@@ -6287,7 +6287,7 @@
     "id": "Ser",
     "name": "뱀자리",
     "nameEn": "Serpent",
-    "difficulty": "극한",
+    "difficulty": "12~14별",
     "stars": [
       {
         "id": 1,
@@ -6442,7 +6442,7 @@
     "id": "And",
     "name": "안드로메다자리",
     "nameEn": "Andromeda",
-    "difficulty": "극한",
+    "difficulty": "15~23별",
     "stars": [
       {
         "id": 1,
@@ -6603,7 +6603,7 @@
     "id": "Cen",
     "name": "센타우루스자리",
     "nameEn": "Centaur",
-    "difficulty": "극한",
+    "difficulty": "15~23별",
     "stars": [
       {
         "id": 1,
@@ -6766,7 +6766,7 @@
     "id": "Dra",
     "name": "용자리",
     "nameEn": "Dragon",
-    "difficulty": "극한",
+    "difficulty": "15~23별",
     "stars": [
       {
         "id": 1,
@@ -6940,7 +6940,7 @@
     "id": "Her",
     "name": "허큘리스자리",
     "nameEn": "Hercules",
-    "difficulty": "극한",
+    "difficulty": "15~23별",
     "stars": [
       {
         "id": 1,
@@ -7125,7 +7125,7 @@
     "id": "UMa",
     "name": "큰곰자리",
     "nameEn": "Big Dipper",
-    "difficulty": "극한",
+    "difficulty": "15~23별",
     "stars": [
       {
         "id": 1,
@@ -7322,7 +7322,7 @@
     "id": "Ori",
     "name": "오리온자리",
     "nameEn": "Orion",
-    "difficulty": "극한",
+    "difficulty": "15~23별",
     "stars": [
       {
         "id": 1,
@@ -7541,7 +7541,7 @@
     "id": "Per",
     "name": "페르세우스자리",
     "nameEn": "Perseus",
-    "difficulty": "극한",
+    "difficulty": "15~23별",
     "stars": [
       {
         "id": 1,
@@ -7751,7 +7751,7 @@
     "id": "Psc",
     "name": "물고기자리",
     "nameEn": "Fishes",
-    "difficulty": "극한",
+    "difficulty": "15~23별",
     "stars": [
       {
         "id": 1,
@@ -7982,7 +7982,7 @@
     "id": "Eri",
     "name": "에리다누스자리",
     "nameEn": "Eridanus",
-    "difficulty": "극한",
+    "difficulty": "15~23별",
     "stars": [
       {
         "id": 1,
@@ -8229,7 +8229,7 @@
     "id": "Sgr",
     "name": "궁수자리",
     "nameEn": "Archer",
-    "difficulty": "극한",
+    "difficulty": "15~23별",
     "stars": [
       {
         "id": 1,

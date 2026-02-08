@@ -298,16 +298,22 @@ async function main() {
   }
   console.log(`  Merged: removed ${mergedTotal} close stars (threshold < 5)`);
 
-  // Assign difficulty by constellation count (5-tier system)
-  constellations.sort((a, b) => a.stars.length - b.stars.length);
-  constellations.forEach((c, i) => {
-    if (i < 5)       c.difficulty = '입문';     // 1단계: 5개
-    else if (i < 15) c.difficulty = '쉬움';     // 2단계: 10개
-    else if (i < 39) c.difficulty = '보통';     // 3단계: 24개
-    else if (i < 63) c.difficulty = '어려움';   // 4단계: 24개
-    else             c.difficulty = '극한';     // 5단계: 나머지
+  // Assign difficulty by star count (9-tier system)
+  constellations.forEach((c) => {
+    const n = c.stars.length;
+    if (n <= 2)      c.difficulty = '2별';
+    else if (n <= 3) c.difficulty = '3별';
+    else if (n <= 4) c.difficulty = '4별';
+    else if (n <= 5) c.difficulty = '5별';
+    else if (n <= 6) c.difficulty = '6별';
+    else if (n <= 8) c.difficulty = '7~8별';
+    else if (n <= 11) c.difficulty = '9~11별';
+    else if (n <= 14) c.difficulty = '12~14별';
+    else              c.difficulty = '15~23별';
   });
-  console.log(`  Difficulty distribution: 입문=${constellations.filter(c=>c.difficulty==='입문').length}, 쉬움=${constellations.filter(c=>c.difficulty==='쉬움').length}, 보통=${constellations.filter(c=>c.difficulty==='보통').length}, 어려움=${constellations.filter(c=>c.difficulty==='어려움').length}, 극한=${constellations.filter(c=>c.difficulty==='극한').length}`);
+  constellations.sort((a, b) => a.stars.length - b.stars.length);
+  const tiers = ['2별','3별','4별','5별','6별','7~8별','9~11별','12~14별','15~23별'];
+  console.log(`  Difficulty distribution: ${tiers.map(t => `${t}=${constellations.filter(c=>c.difficulty===t).length}`).join(', ')}`);
 
   // Write output
   const outputDir = join(__dirname, '..', 'src', 'data');

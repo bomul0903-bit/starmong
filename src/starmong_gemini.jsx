@@ -73,11 +73,15 @@ const STAGES = constellationData.map((c, index) => ({
 }));
 
 const TIERS = [
-  { key: 'beginner', label: '입문', color: 'emerald', difficulty: '입문' },
-  { key: 'easy', label: '쉬움', color: 'sky', difficulty: '쉬움' },
-  { key: 'medium', label: '보통', color: 'blue', difficulty: '보통' },
-  { key: 'hard', label: '어려움', color: 'orange', difficulty: '어려움' },
-  { key: 'extreme', label: '극한', color: 'rose', difficulty: '극한' },
+  { key: 'star2',    label: '2별',     color: 'emerald', difficulty: '2별' },
+  { key: 'star3',    label: '3별',     color: 'teal',    difficulty: '3별' },
+  { key: 'star4',    label: '4별',     color: 'sky',     difficulty: '4별' },
+  { key: 'star5',    label: '5별',     color: 'blue',    difficulty: '5별' },
+  { key: 'star6',    label: '6별',     color: 'indigo',  difficulty: '6별' },
+  { key: 'star78',   label: '7~8별',   color: 'violet',  difficulty: '7~8별' },
+  { key: 'star911',  label: '9~11별',  color: 'amber',   difficulty: '9~11별' },
+  { key: 'star1214', label: '12~14별', color: 'orange',  difficulty: '12~14별' },
+  { key: 'star1523', label: '15~23별', color: 'rose',    difficulty: '15~23별' },
 ];
 
 const TIER_GROUPS = groupStagesByTier(STAGES, TIERS);
@@ -291,8 +295,12 @@ const App = () => {
                 const unlocked = isTierUnlocked(tierIdx, tierIdx > 0 ? TIER_GROUPS[tierIdx - 1].stages : [], completed);
                 const tierColors = {
                   emerald: { bg: 'bg-emerald-500/10', border: 'border-emerald-500/30', text: 'text-emerald-400' },
+                  teal:    { bg: 'bg-teal-500/10',    border: 'border-teal-500/30',    text: 'text-teal-400' },
                   sky:     { bg: 'bg-sky-500/10',     border: 'border-sky-500/30',     text: 'text-sky-400' },
                   blue:    { bg: 'bg-blue-500/10',    border: 'border-blue-500/30',    text: 'text-blue-400' },
+                  indigo:  { bg: 'bg-indigo-500/10',  border: 'border-indigo-500/30',  text: 'text-indigo-400' },
+                  violet:  { bg: 'bg-violet-500/10',  border: 'border-violet-500/30',  text: 'text-violet-400' },
+                  amber:   { bg: 'bg-amber-500/10',   border: 'border-amber-500/30',   text: 'text-amber-400' },
                   orange:  { bg: 'bg-orange-500/10',  border: 'border-orange-500/30',  text: 'text-orange-400' },
                   rose:    { bg: 'bg-rose-500/10',    border: 'border-rose-500/30',    text: 'text-rose-400' },
                 }[tier.color];
