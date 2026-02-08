@@ -1,6 +1,64 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { Star, Map, Trophy, Play, Home, Dog, RotateCcw, Eye, Sparkles, BookOpen, ChevronRight, Lock } from 'lucide-react';
 import constellationData from './data/constellations.json';
+import {
+  isValidConnection,
+  isLineAlreadyDrawn,
+  calculateFinishBonus,
+  isGameComplete,
+  handleMistake as handleMistakeLogic,
+  isTierUnlocked,
+  groupStagesByTier,
+} from './lib/gameLogic';
+
+// --- 사운드 엔진 (Web Audio API 합성) ---
+const SoundEngine = (() => {
+  let ctx = null;
+  const getCtx = () => {
+    if (!ctx) ctx = new (window.AudioContext || window.webkitAudioContext)();
+    if (ctx.state === 'suspended') ctx.resume();
+    return ctx;
+  };
+
+  const playTone = (freq, duration, type = 'sine', volume = 0.15) => {
+    const c = getCtx();
+    const osc = c.createOscillator();
+    const gain = c.createGain();
+    osc.type = type;
+    osc.frequency.value = freq;
+    gain.gain.setValueAtTime(volume, c.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, c.currentTime + duration);
+    osc.connect(gain).connect(c.destination);
+    osc.start(c.currentTime);
+    osc.stop(c.currentTime + duration);
+  };
+
+  return {
+    starConnect() {
+      playTone(523.25, 0.15, 'sine', 0.12); // C5
+      setTimeout(() => playTone(659.25, 0.2, 'sine', 0.12), 80); // E5
+    },
+    mistake() {
+      playTone(329.63, 0.15, 'square', 0.08); // E4
+      setTimeout(() => playTone(277.18, 0.25, 'square', 0.08), 100); // C#4
+    },
+    gameComplete() {
+      const notes = [523.25, 659.25, 783.99, 1046.5]; // C5-E5-G5-C6
+      notes.forEach((freq, i) => {
+        setTimeout(() => playTone(freq, 0.3, 'sine', 0.12), i * 150);
+      });
+    },
+    gameFail() {
+      const notes = [440, 369.99, 311.13]; // A4-F#4-Eb4
+      notes.forEach((freq, i) => {
+        setTimeout(() => playTone(freq, 0.25, 'triangle', 0.1), i * 150);
+      });
+    },
+    buttonClick() {
+      playTone(800, 0.05, 'sine', 0.08);
+    },
+  };
+})();
 
 // --- 별자리 데이터 (d3-celestial 기반 88개 IAU 공식 별자리) ---
 const STAGES = constellationData.map((c, index) => ({
@@ -21,11 +79,7 @@ const TIERS = [
   { key: 'extreme', label: '극한', color: 'rose', difficulty: '극한' },
 ];
 
-const TIER_GROUPS = TIERS.map(tier => ({
-  ...tier,
-  stages: STAGES.filter(s => s.difficulty === tier.difficulty)
-    .sort((a, b) => a.stars.length - b.stars.length),
-}));
+const TIER_GROUPS = groupStagesByTier(STAGES, TIERS);
 
 // --- UI 컴포넌트 ---
 const Miniature = ({ level }) => (
@@ -38,6 +92,40 @@ const Miniature = ({ level }) => (
     {level.stars.map(s => <circle key={s.id} cx={s.x} cy={s.y} r={s.r / 1.5} fill="white" />)}
   </svg>
 );
+
+const BackgroundStars = React.memo(() => {
+  const stars = useMemo(() =>
+    Array.from({ length: 60 }, (_, i) => ({
+      id: i,
+      left: `${Math.random() * 100}%`,
+      top: `${Math.random() * 100}%`,
+      size: 1 + Math.random() * 2,
+      opacity: 0.1 + Math.random() * 0.5,
+      duration: `${2 + Math.random() * 4}s`,
+      delay: `${Math.random() * 5}s`,
+    })),
+  []);
+
+  return (
+    <div className="fixed inset-0 z-0 pointer-events-none" aria-hidden="true">
+      {stars.map(s => (
+        <div
+          key={s.id}
+          className="absolute rounded-full bg-white animate-twinkle"
+          style={{
+            left: s.left,
+            top: s.top,
+            width: s.size,
+            height: s.size,
+            opacity: s.opacity,
+            '--twinkle-duration': s.duration,
+            animationDelay: s.delay,
+          }}
+        />
+      ))}
+    </div>
+  );
+});
 
 const App = () => {
   const [view, setView] = useState('menu');
@@ -78,6 +166,7 @@ const App = () => {
   }, [score]);
 
   const startGame = (level) => {
+    SoundEngine.buttonClick();
     setCurrentLevel(level);
     setActiveStarId(null);
     setSelectedStars([]);
@@ -95,6 +184,7 @@ const App = () => {
     if (!isGameActive) return;
 
     if (activeStarId === null) {
+      SoundEngine.buttonClick();
       setActiveStarId(starId);
       setSelectedStars([starId]);
       setDogMsg("첫 번째 별을 찾았어! 이제 다음 별로 이어줘.");
@@ -104,9 +194,7 @@ const App = () => {
     if (activeStarId === starId) return;
 
     // 이미 그려진 선인지 확인
-    const alreadyDrawn = lines.some(l => 
-      (l[0] === activeStarId && l[1] === starId) || (l[1] === activeStarId && l[0] === starId)
-    );
+    const alreadyDrawn = isLineAlreadyDrawn(activeStarId, starId, lines);
 
     if (alreadyDrawn) {
       setActiveStarId(starId); // 위치만 이동
@@ -114,45 +202,49 @@ const App = () => {
     }
 
     // 고증된 경로 확인
-    const isValid = currentLevel.path.some(p => 
-      (p[0] === activeStarId && p[1] === starId) || (p[1] === activeStarId && p[0] === starId)
-    );
+    const isValid = isValidConnection(activeStarId, starId, currentLevel.path);
 
     if (isValid) {
+      SoundEngine.starConnect();
       const newLines = [...lines, [activeStarId, starId]];
       setLines(newLines);
       if (!selectedStars.includes(starId)) setSelectedStars([...selectedStars, starId]);
       setActiveStarId(starId);
       setScore(s => s + 150);
-      if (newLines.length === currentLevel.path.length) finishGame();
+      if (isGameComplete(newLines.length, currentLevel.path.length)) finishGame();
     } else {
       // 잘못된 클릭
-      const newMistakes = mistakes + 1;
+      const { newCount: newMistakes, isFailed } = handleMistakeLogic(mistakes, MAX_MISTAKES);
       setMistakes(newMistakes);
-      if (newMistakes >= MAX_MISTAKES) {
+      if (isFailed) {
+        SoundEngine.gameFail();
         setIsGameActive(false);
         setShowFailCard(true);
         setDogMsg("3번 틀렸어... 다시 도전해볼까?");
       } else {
+        SoundEngine.mistake();
         setDogMsg(`앗! 그 길은 아니야! (남은 기회: ${MAX_MISTAKES - newMistakes}번)`);
       }
     }
   };
 
   const finishGame = () => {
+    SoundEngine.gameComplete();
     setIsGameActive(false);
-    setScore(s => s + 2000 - Math.min(1000, time * 10));
+    setScore(s => s + calculateFinishBonus(time));
     if (!completed.includes(currentLevel.id)) setCompleted([...completed, currentLevel.id]);
     setTimeout(() => setShowEduCard(true), 800);
   };
 
   const triggerHint = () => {
+    SoundEngine.buttonClick();
     setShowHint(true);
     setTimeout(() => setShowHint(false), 2000);
   };
 
   return (
     <div className="min-h-screen bg-[#020617] text-white font-sans overflow-hidden flex flex-col items-center">
+      <BackgroundStars />
       {/* Top Bar */}
       <div className="w-full max-w-md p-4 flex justify-between items-center z-50">
         <div className="flex gap-2">
@@ -165,7 +257,7 @@ const App = () => {
             <span className="font-bold text-blue-300 text-xs">{completed.length}/{STAGES.length}</span>
           </div>
         </div>
-        <button onClick={() => setView('menu')} className="p-2 bg-slate-800 rounded-xl hover:bg-slate-700 transition-colors border border-white/5">
+        <button onClick={() => { SoundEngine.buttonClick(); setView('menu'); }} className="p-2 bg-slate-800 rounded-xl hover:bg-slate-700 transition-colors border border-white/5">
           <Home className="w-5 h-5" />
         </button>
       </div>
@@ -182,7 +274,7 @@ const App = () => {
             </div>
             <h1 className="text-5xl font-black mb-4 tracking-tighter italic bg-gradient-to-r from-yellow-200 via-yellow-400 to-orange-500 bg-clip-text text-transparent uppercase">Star Mong</h1>
             <p className="text-slate-400 text-lg mb-12 leading-relaxed font-medium">정밀한 성도 데이터를 기반으로 구현된<br/><span className="text-yellow-400">{STAGES.length}개 별자리 카드</span>를 수집하세요!</p>
-            <button onClick={() => setView('map')} className="w-full bg-yellow-400 hover:bg-yellow-300 text-slate-950 font-black py-5 rounded-[2.5rem] text-2xl shadow-[0_8px_0_0_#ca8a04] active:translate-y-1 transition-all flex items-center justify-center gap-4 group">
+            <button onClick={() => { SoundEngine.buttonClick(); setView('map'); }} className="w-full bg-yellow-400 hover:bg-yellow-300 text-slate-950 font-black py-5 rounded-[2.5rem] text-2xl shadow-[0_8px_0_0_#ca8a04] active:translate-y-1 transition-all flex items-center justify-center gap-4 group">
               <Play className="fill-current group-hover:scale-110 transition-transform" /> 탐사 시작
             </button>
           </div>
@@ -195,7 +287,7 @@ const App = () => {
             <div className="flex-1 overflow-y-auto space-y-6 custom-scrollbar pb-10">
               {TIER_GROUPS.map((tier, tierIdx) => {
                 const doneCount = tier.stages.filter(s => completed.includes(s.id)).length;
-                const unlocked = tierIdx === 0 || TIER_GROUPS[tierIdx - 1].stages.every(s => completed.includes(s.id));
+                const unlocked = isTierUnlocked(tierIdx, tierIdx > 0 ? TIER_GROUPS[tierIdx - 1].stages : [], completed);
                 const tierColors = {
                   emerald: { bg: 'bg-emerald-500/10', border: 'border-emerald-500/30', text: 'text-emerald-400' },
                   blue:    { bg: 'bg-blue-500/10',    border: 'border-blue-500/30',    text: 'text-blue-400' },
@@ -364,7 +456,7 @@ const App = () => {
                 </div>
                 <h4 className="text-4xl font-black text-white mb-4 drop-shadow-lg">{currentLevel.name}</h4>
                 <p className="text-slate-400 text-[11px] text-center leading-relaxed font-medium px-4 mb-10 min-h-[48px]">"{currentLevel.desc}"</p>
-                <button onClick={() => { setShowEduCard(false); setView('map'); }} 
+                <button onClick={() => { SoundEngine.buttonClick(); setShowEduCard(false); setView('map'); }}
                         className="w-full bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-400 hover:to-orange-400 text-slate-950 font-black py-5 rounded-3xl shadow-[0_6px_0_0_#ca8a04] active:translate-y-1 transition-all flex items-center justify-center gap-3 text-lg">
                   <BookOpen className="w-5 h-5" /> 도감에 보관하기
                 </button>
@@ -382,10 +474,10 @@ const App = () => {
                 <h3 className="text-2xl font-black italic">연결 실패</h3>
               </div>
               <div className="p-8 flex flex-col gap-3">
-                <button onClick={() => startGame(currentLevel)} className="w-full bg-rose-500 hover:bg-rose-400 text-white font-black py-5 rounded-2xl flex items-center justify-center gap-3 shadow-[0_6px_0_0_#9f1239] active:translate-y-1 transition-all">
+                <button onClick={() => { SoundEngine.buttonClick(); startGame(currentLevel); }} className="w-full bg-rose-500 hover:bg-rose-400 text-white font-black py-5 rounded-2xl flex items-center justify-center gap-3 shadow-[0_6px_0_0_#9f1239] active:translate-y-1 transition-all">
                   <RotateCcw className="w-5 h-5" /> 다시 도전하기
                 </button>
-                <button onClick={() => { setShowFailCard(false); setActiveStarId(null); setMistakes(0); triggerHint(); setIsGameActive(true); }} className="w-full bg-slate-800 hover:bg-slate-700 text-white font-black py-5 rounded-2xl border border-white/5 transition-all">
+                <button onClick={() => { SoundEngine.buttonClick(); setShowFailCard(false); setActiveStarId(null); setMistakes(0); triggerHint(); setIsGameActive(true); }} className="w-full bg-slate-800 hover:bg-slate-700 text-white font-black py-5 rounded-2xl border border-white/5 transition-all">
                   모양 다시 확인
                 </button>
               </div>
