@@ -287,24 +287,15 @@ async function main() {
     };
   }
 
-  // Simplify all constellations
-  let removedTotal = 0;
+  // Merge close stars only (no simplify)
   let mergedTotal = 0;
   for (const c of constellations) {
-    const before = c.stars.length;
-    const result = simplify(c.stars, c.path);
-    c.stars = result.stars;
-    c.path = result.path;
-    removedTotal += before - c.stars.length;
-
-    // Merge close stars
     const beforeMerge = c.stars.length;
     const merged = mergeCloseStars(c.stars, c.path);
     c.stars = merged.stars;
     c.path = merged.path;
     mergedTotal += beforeMerge - c.stars.length;
   }
-  console.log(`  Simplified: removed ${removedTotal} pass-through stars`);
   console.log(`  Merged: removed ${mergedTotal} close stars (threshold < 5)`);
 
   // Assign difficulty by constellation count (5-tier system)

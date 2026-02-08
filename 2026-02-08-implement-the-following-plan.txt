@@ -1,0 +1,37 @@
+
+▗ ▗   ▖ ▖  Claude Code v2.1.34
+           Opus 4.6 · Claude Pro
+  ▘▘ ▝▝    ~/work/bomul/starmong
+
+✻ Conversation compacted (ctrl+o for history)
+
+
+❯ /compact 
+  ⎿  Compacted (ctrl+o to see full summary)
+  ⎿  Referenced file src/starmong_gemini.jsx
+  ⎿  Read tailwind.config.js (13 lines)
+  ⎿  Read src/index.css (9 lines)
+  ⎿  Plan file referenced (~/.claude/plans/swirling-waddling-twilight.md)
+
+❯ /context 
+  ⎿  Context Usage
+     ⛁ ⛀ ⛁ ⛁ ⛁ ⛁ ⛁ ⛁ ⛁ ⛁   claude-opus-4-6 · 26k/200k tokens (13%)
+     ⛀ ⛀ ⛀ ⛁ ⛁ ⛶ ⛶ ⛶ ⛶ ⛶ 
+     ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶   Estimated usage by category
+     ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶   ⛁ System prompt: 3.1k tokens (1.5%)
+     ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶   ⛁ System tools: 16.7k tokens (8.3%)
+     ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶   ⛁ MCP tools: 909 tokens (0.5%)
+     ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶   ⛁ Memory files: 332 tokens (0.2%)
+     ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶   ⛁ Skills: 61 tokens (0.0%)
+     ⛶ ⛶ ⛶ ⛝ ⛝ ⛝ ⛝ ⛝ ⛝ ⛝   ⛁ Messages: 4.7k tokens (2.4%)
+     ⛝ ⛝ ⛝ ⛝ ⛝ ⛝ ⛝ ⛝ ⛝ ⛝   ⛶ Free space: 141k (70.6%)
+                           ⛝ Autocompact buffer: 33k tokens (16.5%)
+
+     MCP tools · /mcp
+     └ mcp__context7__resolve-library-id: 500 tokens
+     └ mcp__context7__query-docs: 409 tokens
+
+     Memory files · /memory
+     └ CLAUDE.md: 332 tokens
+
+     Skills · /skills
