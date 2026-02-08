@@ -20,42 +20,54 @@ const SoundEngine = (() => {
     return ctx;
   };
 
-  const playTone = (freq, duration, type = 'sine', volume = 0.15) => {
+  // ADSR 엔벨로프 + 레이어링 지원
+  const playTone = (freq, duration, type = 'sine', volume = 0.4, { layer, attack = 0.02, sustain } = {}) => {
     const c = getCtx();
-    const osc = c.createOscillator();
-    const gain = c.createGain();
-    osc.type = type;
-    osc.frequency.value = freq;
-    gain.gain.setValueAtTime(volume, c.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.001, c.currentTime + duration);
-    osc.connect(gain).connect(c.destination);
-    osc.start(c.currentTime);
-    osc.stop(c.currentTime + duration);
+    const t = c.currentTime;
+    const sustainEnd = t + (sustain ?? duration * 0.4);
+
+    const makeOsc = (f, tp, vol) => {
+      const osc = c.createOscillator();
+      const gain = c.createGain();
+      osc.type = tp;
+      osc.frequency.value = f;
+      // ADSR: attack → sustain → release
+      gain.gain.setValueAtTime(0.001, t);
+      gain.gain.linearRampToValueAtTime(vol, t + attack);
+      gain.gain.setValueAtTime(vol, sustainEnd);
+      gain.gain.exponentialRampToValueAtTime(0.001, t + duration);
+      osc.connect(gain).connect(c.destination);
+      osc.start(t);
+      osc.stop(t + duration);
+    };
+
+    makeOsc(freq, type, volume);
+    if (layer) makeOsc(layer.freq ?? freq * 2, layer.type ?? 'triangle', layer.vol ?? volume * 0.3);
   };
 
   return {
     starConnect() {
-      playTone(523.25, 0.15, 'sine', 0.12); // C5
-      setTimeout(() => playTone(659.25, 0.2, 'sine', 0.12), 80); // E5
+      playTone(523.25, 0.3, 'sine', 0.4, { layer: { type: 'triangle', vol: 0.15 } }); // C5
+      setTimeout(() => playTone(659.25, 0.35, 'sine', 0.4, { layer: { type: 'triangle', vol: 0.15 } }), 80); // E5
     },
     mistake() {
-      playTone(329.63, 0.15, 'square', 0.08); // E4
-      setTimeout(() => playTone(277.18, 0.25, 'square', 0.08), 100); // C#4
+      playTone(329.63, 0.25, 'square', 0.3); // E4
+      setTimeout(() => playTone(277.18, 0.35, 'square', 0.3), 100); // C#4
     },
     gameComplete() {
       const notes = [523.25, 659.25, 783.99, 1046.5]; // C5-E5-G5-C6
       notes.forEach((freq, i) => {
-        setTimeout(() => playTone(freq, 0.3, 'sine', 0.12), i * 150);
+        setTimeout(() => playTone(freq, 0.5, 'sine', 0.45, { layer: { type: 'triangle', vol: 0.2 }, sustain: 0.25 }), i * 180);
       });
     },
     gameFail() {
       const notes = [440, 369.99, 311.13]; // A4-F#4-Eb4
       notes.forEach((freq, i) => {
-        setTimeout(() => playTone(freq, 0.25, 'triangle', 0.1), i * 150);
+        setTimeout(() => playTone(freq, 0.4, 'triangle', 0.35, { layer: { type: 'square', vol: 0.1 } }), i * 180);
       });
     },
     buttonClick() {
-      playTone(800, 0.05, 'sine', 0.08);
+      playTone(800, 0.1, 'sine', 0.3);
     },
   };
 })();
