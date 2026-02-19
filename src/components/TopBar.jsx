@@ -1,9 +1,9 @@
 import React from 'react';
-import { Trophy, Star, Home } from 'lucide-react';
+import { Trophy, Star, Home, LogOut } from 'lucide-react';
 import SoundEngine from '../lib/soundEngine';
 import { STAGES } from '../lib/constants';
 
-const TopBar = ({ score, completedCount, onHomeClick }) => (
+const TopBar = ({ score, completedCount, onHomeClick, user, onLogout }) => (
   <div className="w-full max-w-md p-4 flex justify-between items-center z-50">
     <div className="flex gap-2">
       <div className="bg-slate-800/80 px-4 py-1.5 rounded-full border border-yellow-500/20 flex items-center gap-2">
@@ -15,9 +15,19 @@ const TopBar = ({ score, completedCount, onHomeClick }) => (
         <span className="font-bold text-blue-300 text-xs">{completedCount}/{STAGES.length}</span>
       </div>
     </div>
-    <button onClick={() => { SoundEngine.buttonClick(); onHomeClick(); }} className="p-2 bg-slate-800 rounded-xl hover:bg-slate-700 transition-colors border border-white/5">
-      <Home className="w-5 h-5" />
-    </button>
+    <div className="flex items-center gap-2">
+      {user?.user_metadata?.avatar_url && (
+        <img src={user.user_metadata.avatar_url} alt="" className="w-8 h-8 rounded-full border border-white/20" />
+      )}
+      <button onClick={() => { SoundEngine.buttonClick(); onHomeClick(); }} className="p-2 bg-slate-800 rounded-xl hover:bg-slate-700 transition-colors border border-white/5">
+        <Home className="w-5 h-5" />
+      </button>
+      {onLogout && (
+        <button onClick={() => { SoundEngine.buttonClick(); onLogout(); }} className="p-2 bg-slate-800 rounded-xl hover:bg-slate-700 transition-colors border border-white/5">
+          <LogOut className="w-5 h-5 text-slate-400" />
+        </button>
+      )}
+    </div>
   </div>
 );
 

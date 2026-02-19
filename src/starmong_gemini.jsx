@@ -9,8 +9,10 @@ import {
 } from './lib/gameLogic';
 import SoundEngine from './lib/soundEngine';
 import { STAGES, MAX_MISTAKES } from './lib/constants';
+import { supabase } from './lib/supabase';
 import BackgroundStars from './components/BackgroundStars';
 import TopBar from './components/TopBar';
+import LoginView from './components/LoginView';
 import MenuView from './components/MenuView';
 import MapView from './components/MapView';
 import GameView from './components/GameView';
@@ -18,6 +20,8 @@ import EduCardModal from './components/EduCardModal';
 import FailCardModal from './components/FailCardModal';
 
 const App = () => {
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
   const [view, setView] = useState('menu');
   const [completed, setCompleted] = useState(() => {
     try { return JSON.parse(localStorage.getItem('starmong-completed')) || []; }
@@ -38,6 +42,17 @@ const App = () => {
   const [showFailCard, setShowFailCard] = useState(false);
   const [mistakes, setMistakes] = useState(0);
   const [dogMsg, setDogMsg] = useState("안녕! 별 여행을 떠나볼까?");
+
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setUser(session?.user ?? null);
+      setLoading(false);
+    });
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(session?.user ?? null);
+    });
+    return () => subscription.unsubscribe();
+  }, []);
 
   useEffect(() => {
     let timer;
@@ -139,10 +154,35 @@ const App = () => {
     setDogMsg("마지막 연결을 취소했어!");
   };
 
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+    setView('menu');
+  };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-[#020617] text-white flex items-center justify-center">
+        <BackgroundStars />
+        <div className="text-yellow-400 text-xl font-bold animate-pulse">Loading...</div>
+      </div>
+    );
+  }
+
+  if (!user) {
+    return (
+      <div className="min-h-screen bg-[#020617] text-white font-sans overflow-hidden flex flex-col items-center">
+        <BackgroundStars />
+        <div className="flex-1 w-full max-w-md relative flex flex-col">
+          <LoginView />
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-[#020617] text-white font-sans overflow-hidden flex flex-col items-center">
       <BackgroundStars />
-      <TopBar score={score} completedCount={completed.length} onHomeClick={() => setView('menu')} />
+      <TopBar score={score} completedCount={completed.length} onHomeClick={() => setView('menu')} user={user} onLogout={handleLogout} />
 
       <div className="flex-1 w-full max-w-md relative flex flex-col">
         {view === 'menu' && <MenuView onStart={() => setView('map')} />}
