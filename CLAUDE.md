@@ -48,10 +48,24 @@ The legacy `src/starmong.jsx` is an earlier Canvas-based prototype (unused).
 
 ## Lib
 
-- `src/lib/gameLogic.js` — 순수 게임 로직 (테스트: `npx vitest run`, 35 tests)
+- `src/lib/gameLogic.js` — 순수 게임 로직
 - `src/lib/constants.js` — STAGES, TIERS, MAX_MISTAKES
 - `src/lib/soundEngine.js` — Web Audio API (try-catch protected)
 - `src/lib/supabase.js` — Supabase 클라이언트 (env: `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY`)
+
+## Testing
+
+```bash
+npx vitest run                           # 전체 85 tests
+npx vitest run src/lib/__tests__/        # gameLogic 순수 함수 (35 tests, node 환경)
+npx vitest run src/components/__tests__/ # 컴포넌트 렌더링/인터랙션 (50 tests, jsdom 환경)
+```
+
+- **설정**: `vite.config.js` (environment: node + setupFiles), `src/test/setup.js` (jest-dom + cleanup)
+- **Mock**: `src/test/mocks.js` — SoundEngine/Supabase mock 함수, TEST_LEVEL fixtures
+- **컴포넌트 테스트**: `// @vitest-environment jsdom` 주석으로 per-file jsdom 전환 (기존 node 테스트와 공존)
+- **라이브러리**: `@testing-library/react`, `@testing-library/jest-dom`, `@testing-library/user-event`, `jsdom`
+- **커버리지**: LoginView(6), TopBar(8), GameView(17), MenuView(4), MapView(6), EduCardModal(5), FailCardModal(4)
 
 ## Auth (Supabase)
 
