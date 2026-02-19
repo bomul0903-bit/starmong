@@ -1,5 +1,5 @@
 import React from 'react';
-import { Trophy, Star, Home, LogOut } from 'lucide-react';
+import { Trophy, Star, Home, LogOut, User } from 'lucide-react';
 import SoundEngine from '../lib/soundEngine';
 import { STAGES } from '../lib/constants';
 
@@ -16,7 +16,11 @@ const TopBar = ({ score, completedCount, onHomeClick, user, onLogout }) => (
       </div>
     </div>
     <div className="flex items-center gap-2">
-      {user?.user_metadata?.avatar_url && (
+      {user?.is_anonymous ? (
+        <div className="w-8 h-8 rounded-full bg-slate-700 border border-white/20 flex items-center justify-center">
+          <User className="w-4 h-4 text-slate-300" />
+        </div>
+      ) : user?.user_metadata?.avatar_url && (
         <img src={user.user_metadata.avatar_url} alt="" className="w-8 h-8 rounded-full border border-white/20" />
       )}
       <button onClick={() => { SoundEngine.buttonClick(); onHomeClick(); }} className="p-2 bg-slate-800 rounded-xl hover:bg-slate-700 transition-colors border border-white/5">

@@ -16,6 +16,10 @@ const LoginView = () => {
     await supabase.auth.signInWithOAuth({ provider: 'google' });
   };
 
+  const handleAnonymousLogin = async () => {
+    await supabase.auth.signInAnonymously();
+  };
+
   return (
     <div className="flex flex-col items-center justify-center h-full px-8 pt-24 text-center animate-in zoom-in duration-500">
       <div className="relative mb-12">
@@ -32,6 +36,12 @@ const LoginView = () => {
       >
         <GoogleIcon />
         Google로 시작하기
+      </button>
+      <button
+        onClick={handleAnonymousLogin}
+        className="w-full mt-3 bg-transparent hover:bg-slate-800 text-slate-400 hover:text-slate-200 font-medium py-3 rounded-2xl text-base border border-slate-700 transition-all"
+      >
+        둘러보기
       </button>
     </div>
   );
