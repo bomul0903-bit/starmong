@@ -17,7 +17,7 @@ const LoginView = () => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center h-full px-8 text-center animate-in zoom-in duration-500">
+    <div className="flex flex-col items-center justify-center h-full px-8 pt-24 text-center animate-in zoom-in duration-500">
       <div className="relative mb-12">
         <div className="absolute -inset-10 bg-blue-500/10 blur-[80px] rounded-full animate-pulse" />
         <div className="relative z-10 p-6 bg-slate-800 rounded-[3rem] border border-white/10 shadow-2xl">
